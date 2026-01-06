@@ -104,6 +104,7 @@ section {
   position: relative;
 }
 
+/* 赤線 */
 #rule::after {
   content: "";
   position: absolute;
@@ -117,6 +118,11 @@ section {
 
 #rule.focus::after {
   width: 100%;
+}
+
+/* ★ 条例の下に3行分の空白 */
+.rule-space {
+  height: calc(1.8em * 3);
 }
 
 /* ===== 黒画面 ===== */
@@ -195,7 +201,7 @@ section {
   <p>本募集は予告なく内容を変更、または終了する場合があります。</p>
   <p>応募内容に虚偽があった場合、採用を取り消すことがあります。</p>
   <p>勤務条件の詳細は面談時にご説明いたします。</p>
-  <p>勤務条件の詳細は面談時にご説明いたします。</p>
+    <p>勤務条件の詳細は面談時にご説明いたします。</p>
   <p>勤務条件の詳細は面談時にご説明いたします。</p>
   <p>勤務条件の詳細は面談時にご説明いたします。</p>
   <p>勤務条件██詳細は面█████ご説明いたします。</p>
@@ -204,6 +210,9 @@ section {
   <p id="rule">
     条例により、河岸県民のみアルバイトの応募が可能です。
   </p>
+
+  <!-- ★ 3行分の空白 -->
+  <div class="rule-space"></div>
 </section>
 
 <div id="black"></div>
@@ -215,7 +224,7 @@ section {
 
 <div class="black-text" id="final">
   最終問題<br>
-  どうにかして、アルバイトに応募し、<br>
+  どうにかして、このアルバイトに応募し、<br>
   吉田を捕まえろ。
 </div>
 
@@ -224,8 +233,16 @@ const PASSWORD = "riddle";
 
 function unlock() {
   const input = pw.value;
-  error.style.display = input === PASSWORD ? "none" : "block";
-  if (input === PASSWORD) lock.style.display = "none";
+
+  if (input === PASSWORD) {
+    error.style.display = "none";
+    lock.style.display = "none";
+
+    // ★ 必ず最上部から開始
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  } else {
+    error.style.display = "block";
+  }
 }
 
 let triggered = false;
@@ -252,4 +269,3 @@ window.addEventListener("scroll", () => {
 
 </body>
 </html>
-
