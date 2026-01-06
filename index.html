@@ -16,7 +16,7 @@ body {
   line-height: 1.8;
 }
 
-/* ===== パスワード ===== */
+/* ===== パスワード画面 ===== */
 #lock {
   position: fixed;
   inset: 0;
@@ -30,28 +30,27 @@ body {
 
 .lock-box {
   width: 90%;
-  max-width: 360px;
+  max-width: 380px;
   text-align: center;
 }
 
 .lock-box p {
-  font-size: 14px;
+  font-size: clamp(13px, 3.5vw, 15px);
   margin-bottom: 24px;
   opacity: .85;
 }
 
 .lock-box input {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   font-size: 16px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .lock-box button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   font-size: 16px;
-  cursor: pointer;
 }
 
 .error {
@@ -65,13 +64,22 @@ body {
 header {
   background: #2f2f2f;
   color: #fff;
-  padding: 40px 20px;
+  padding: 36px 16px;
   text-align: center;
+}
+
+header h1 {
+  font-size: clamp(22px, 6vw, 28px);
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: clamp(14px, 4vw, 16px);
 }
 
 /* ===== セクション ===== */
 section {
-  padding: 40px 20px;
+  padding: 36px 16px;
   max-width: 720px;
   margin: auto;
 }
@@ -79,19 +87,20 @@ section {
 /* ===== 注意事項 ===== */
 .notice {
   background: #fff;
-  padding: 28px;
+  padding: 24px;
   border-radius: 8px;
 }
 
 .notice p {
-  margin: 14px 0;
+  margin: 12px 0;
+  font-size: clamp(14px, 4vw, 16px);
 }
 
 /* ===== 条例 ===== */
 #rule {
-  margin-top: 24px;
-  padding-bottom: 20px;
+  margin: 20px 0;
   font-weight: bold;
+  display: inline-block;
   position: relative;
 }
 
@@ -99,7 +108,7 @@ section {
   content: "";
   position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: -6px;
   width: 0;
   height: 3px;
   background: red;
@@ -117,7 +126,7 @@ section {
   background: #000;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 5s;
+  transition: opacity 4s;
   z-index: 1500;
 }
 
@@ -133,12 +142,13 @@ section {
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 20px;
   font-family: "游明朝", "Yu Mincho", "MS 明朝", serif;
   color: #fff;
-  font-size: 24px;
-  line-height: 1.9;
+  font-size: clamp(18px, 5vw, 26px);
+  line-height: 1.6;
   opacity: 0;
-  transition: opacity 2.5s;
+  transition: opacity 2s;
   z-index: 1600;
 }
 
@@ -160,10 +170,9 @@ section {
   <div class="lock-box">
     <p>
       このサイトは謎解きゲーム<br>
-      『とあるホテルの秘密』のために<br>
-      作られたものです。<br><br>
-      記載されている情報は<br>
-      すべてフィクションです。<br><br>［※吉田に【ぱすわーど】と送信してください。<br>このサイトのパスワードが送信されます。］
+      『とあるホテルの秘密』のために作られたものであり、<br>
+      記載されている内容はすべてフィクションです。<br><br>
+      ［※吉田に【ぱすわーど】と送信してください］
     </p>
     <input type="password" id="pw" placeholder="パスワード">
     <button onclick="unlock()">物語を進める</button>
@@ -201,32 +210,27 @@ section {
 
 <div class="black-text" id="final">
   最終問題<br>
-  どうにかして、このアルバイトに応募し、<br>
+  どうにかして、アルバイトに応募し、<br>
   吉田を捕まえろ。
 </div>
 
 <script>
 const PASSWORD = "riddle";
-let unlocked = false;
-let triggered = false;
 
 function unlock() {
-  const input = document.getElementById("pw").value;
-  const error = document.getElementById("error");
-
-  if (input === PASSWORD) {
-    document.getElementById("lock").style.display = "none";
-    unlocked = true;
-  } else {
-    error.style.display = "block";
-  }
+  const input = pw.value;
+  error.style.display = input === PASSWORD ? "none" : "block";
+  if (input === PASSWORD) lock.style.display = "none";
 }
 
+let triggered = false;
+
 window.addEventListener("scroll", () => {
-  if (!unlocked || triggered) return;
+  if (triggered || lock.style.display !== "none") return;
 
   const bottom =
-    window.innerHeight + window.scrollY >= document.body.offsetHeight - 5;
+    window.innerHeight + window.scrollY >=
+    document.documentElement.scrollHeight - 20;
 
   if (bottom) {
     triggered = true;
@@ -234,9 +238,9 @@ window.addEventListener("scroll", () => {
 
     setTimeout(() => rule.classList.add("focus"), 5000);
     setTimeout(() => black.classList.add("show"), 9000);
-    setTimeout(() => reveal.classList.add("show"), 14000);
-    setTimeout(() => reveal.classList.remove("show"), 20000);
-    setTimeout(() => final.classList.add("show"), 23000);
+    setTimeout(() => reveal.classList.add("show"), 13000);
+    setTimeout(() => reveal.classList.remove("show"), 18000);
+    setTimeout(() => final.classList.add("show"), 21000);
   }
 });
 </script>
