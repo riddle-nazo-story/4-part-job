@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>居酒屋しらぬん｜アルバイト応募</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f5f5;
+  color: #222;
+  line-height: 1.8;
+}
+
+/* ===== パスワード ===== */
+#lock {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.lock-box {
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.lock-box p {
+  font-size: 14px;
+  margin-bottom: 24px;
+  opacity: .85;
+}
+
+.lock-box input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin-bottom: 18px;
+}
+
+.lock-box button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.error {
+  color: #ff6666;
+  font-size: 13px;
+  margin-top: 10px;
+  display: none;
+}
+
+/* ===== ヘッダー ===== */
+header {
+  background: #2f2f2f;
+  color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* ===== セクション ===== */
+section {
+  padding: 40px 20px;
+  max-width: 720px;
+  margin: auto;
+}
+
+/* ===== 注意事項 ===== */
+.notice {
+  background: #fff;
+  padding: 28px;
+  border-radius: 8px;
+}
+
+.notice p {
+  margin: 14px 0;
+}
+
+/* ===== 条例 ===== */
+#rule {
+  margin-top: 24px;
+  padding-bottom: 20px;
+  font-weight: bold;
+  position: relative;
+}
+
+#rule::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 3px;
+  background: red;
+  transition: width 3s linear;
+}
+
+#rule.focus::after {
+  width: 100%;
+}
+
+/* ===== 黒画面 ===== */
+#black {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 5s;
+  z-index: 1500;
+}
+
+#black.show {
+  opacity: 1;
+}
+
+/* ===== 黒画面テキスト ===== */
+.black-text {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: "游明朝", "Yu Mincho", "MS 明朝", serif;
+  color: #fff;
+  font-size: 24px;
+  line-height: 1.9;
+  opacity: 0;
+  transition: opacity 2.5s;
+  z-index: 1600;
+}
+
+.black-text.show {
+  opacity: 1;
+}
+
+/* ===== スクロール固定 ===== */
+.lock-scroll {
+  overflow: hidden;
+}
+</style>
+</head>
+
+<body>
+
+<!-- パスワード -->
+<div id="lock">
+  <div class="lock-box">
+    <p>
+      このサイトは謎解きゲーム<br>
+      『とあるホテルの秘密』のために<br>
+      作られたものです。<br><br>
+      記載されている情報は<br>
+      すべてフィクションです。<br><br>［※吉田に【ぱすわーど】と送信してください。<br>このサイトのパスワードが送信されます。］
+    </p>
+    <input type="password" id="pw" placeholder="パスワード">
+    <button onclick="unlock()">物語を進める</button>
+    <div class="error" id="error">パスワードが違います</div>
+  </div>
+</div>
+
+<header>
+  <h1>居酒屋しらぬん</h1>
+  <p>アルバイト応募ページ</p>
+</header>
+
+<section>
+  <h2>募集要項</h2>
+  <p>居酒屋しらぬんでは、ホール・キッチンスタッフを募集しています。</p>
+</section>
+
+<section class="notice">
+  <h3>注意事項</h3>
+  <p>本募集は予告なく内容を変更、または終了する場合があります。</p>
+  <p>応募内容に虚偽があった場合、採用を取り消すことがあります。</p>
+  <p>勤務条件の詳細は面談時にご説明いたします。</p>
+
+  <p id="rule">
+    条例により、河岸県民のみアルバイトの応募が可能です。
+  </p>
+</section>
+
+<div id="black"></div>
+
+<div class="black-text" id="reveal">
+  どうやら、アルバイトは<br>
+  河岸県民しか応募できないようだ。
+</div>
+
+<div class="black-text" id="final">
+  最終問題<br>
+  どうにかして、このアルバイトに応募し、<br>
+  吉田を捕まえろ。
+</div>
+
+<script>
+const PASSWORD = "riddle";
+let unlocked = false;
+let triggered = false;
+
+function unlock() {
+  const input = document.getElementById("pw").value;
+  const error = document.getElementById("error");
+
+  if (input === PASSWORD) {
+    document.getElementById("lock").style.display = "none";
+    unlocked = true;
+  } else {
+    error.style.display = "block";
+  }
+}
+
+window.addEventListener("scroll", () => {
+  if (!unlocked || triggered) return;
+
+  const bottom =
+    window.innerHeight + window.scrollY >= document.body.offsetHeight - 5;
+
+  if (bottom) {
+    triggered = true;
+    document.body.classList.add("lock-scroll");
+
+    setTimeout(() => rule.classList.add("focus"), 5000);
+    setTimeout(() => black.classList.add("show"), 9000);
+    setTimeout(() => reveal.classList.add("show"), 14000);
+    setTimeout(() => reveal.classList.remove("show"), 20000);
+    setTimeout(() => final.classList.add("show"), 23000);
+  }
+});
+</script>
+
+</body>
+</html>
